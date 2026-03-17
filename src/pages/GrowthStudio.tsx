@@ -31,7 +31,7 @@ export function GrowthStudio() {
 
         {/* Stats */}
         <div
-          className="rounded-xl px-6 py-4 flex items-center gap-8"
+          className="rounded-xl px-6 py-4 grid grid-cols-2 sm:flex sm:items-center gap-4 sm:gap-8"
           style={{ backgroundColor: '#ffffff', border: '1px solid #e5e5e5' }}
         >
           {[
@@ -51,7 +51,7 @@ export function GrowthStudio() {
         </div>
 
         {/* Row 1: Radar + Trend Chart */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Skill Radar — col 1 */}
           <div
             className="rounded-xl p-5"
@@ -98,7 +98,7 @@ export function GrowthStudio() {
 
           {/* Skill Score Trend — col 2-3 */}
           <div
-            className="col-span-2 rounded-xl p-5"
+            className="lg:col-span-2 rounded-xl p-5"
             style={{ backgroundColor: '#ffffff', border: '1px solid #e5e5e5' }}
           >
             <div className="flex items-center justify-between mb-4">
@@ -106,7 +106,7 @@ export function GrowthStudio() {
                 <TrendingUp className="w-3.5 h-3.5" style={{ color: '#737373' }} />
                 <h3 className="text-sm font-semibold text-black">スキル推移</h3>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-4">
                 {[
                   { label: '総合点', color: '#6366F1' },
                   { label: '授業設計力', color: '#10B981' },
@@ -136,7 +136,7 @@ export function GrowthStudio() {
                 <Line type="monotone" dataKey="学級経営力" stroke="#a3a3a3" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
               </LineChart>
             </ResponsiveContainer>
-            <div className="mt-3 grid grid-cols-4 gap-3">
+            <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
                 { label: '今月の総合点', value: '73点', delta: '+1', up: true },
                 { label: '最高スキル', value: '授業設計力', delta: '80点', up: null },
@@ -163,7 +163,7 @@ export function GrowthStudio() {
         </div>
 
         {/* Row 2: Roleplay + Feedback */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* AI Roleplay — col 1 */}
           <div
             className="rounded-xl overflow-hidden"
@@ -273,7 +273,7 @@ export function GrowthStudio() {
 
           {/* Lesson Audio Feedback — col 2-3 */}
           <div
-            className="col-span-2 rounded-xl overflow-hidden"
+            className="lg:col-span-2 rounded-xl overflow-hidden"
             style={{ backgroundColor: '#ffffff', border: '1px solid #e5e5e5' }}
           >
             <div

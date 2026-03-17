@@ -96,9 +96,9 @@ export function GradeIntelligence() {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div
-            className="col-span-2 rounded-xl p-5"
+            className="lg:col-span-2 rounded-xl p-5"
             style={{ backgroundColor: '#ffffff', border: '1px solid #e5e5e5' }}
           >
             <h3 className="text-sm font-semibold text-black mb-5">クラス平均推移</h3>

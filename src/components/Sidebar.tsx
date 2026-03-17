@@ -8,6 +8,7 @@ import {
   Settings,
   HelpCircle,
   Zap,
+  X,
 } from 'lucide-react';
 
 const navItems = [
@@ -23,15 +24,22 @@ const bottomItems = [
   { to: '/help', icon: HelpCircle, label: 'ヘルプ' },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside
-      className="fixed top-0 left-0 h-full w-60 flex flex-col z-30 bg-white"
+      className={`fixed top-0 left-0 h-full w-60 flex flex-col z-30 bg-white transition-transform duration-300 ease-in-out ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
       style={{ borderRight: '1px solid #e5e5e5' }}
     >
       {/* Logo — h-14 to match header */}
       <div
-        className="h-14 flex items-center px-5 flex-shrink-0"
+        className="h-14 flex items-center justify-between px-5 flex-shrink-0"
         style={{ borderBottom: '1px solid #e5e5e5' }}
       >
         <div className="flex items-center gap-2.5">
@@ -42,10 +50,19 @@ export function Sidebar() {
             <Zap className="w-3.5 h-3.5 text-white" />
           </div>
           <div>
-            <div className="text-sm font-semibold text-black tracking-tight">TEACHR AX</div>
+            <div className="text-sm font-semibold text-black tracking-tight">TEACHER AX</div>
             <div className="text-xs" style={{ color: '#a3a3a3' }}>by KnowledgeWork</div>
           </div>
         </div>
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100"
+          style={{ color: '#a3a3a3' }}
+          aria-label="メニューを閉じる"
+        >
+          <X className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Nav label */}
@@ -62,6 +79,10 @@ export function Sidebar() {
             key={to}
             to={to}
             end={exact}
+            onClick={() => {
+              // モバイルではナビ後に閉じる
+              if (window.innerWidth < 1024) onClose();
+            }}
             className="relative flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-lg text-sm font-medium overflow-hidden"
             style={({ isActive }) => ({
               backgroundColor: isActive ? '#f5f5f5' : 'transparent',

@@ -297,7 +297,7 @@ export function PrepStudio() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Material Library */}
           <div
             className="rounded-xl overflow-hidden"
@@ -424,7 +424,7 @@ export function PrepStudio() {
                     <p className="text-xs leading-relaxed" style={{ color: '#525252' }}>{detail.overview}</p>
                   </div>
 
-                  <div className="px-5 pb-4 grid grid-cols-2 gap-4">
+                  <div className="px-5 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Key Points */}
                     <div>
                       <p className="text-xs font-semibold text-black mb-2 flex items-center gap-1.5">
@@ -625,9 +625,9 @@ export function PrepStudio() {
 
         {/* Generated Content + Chat */}
         {showGenerated && (
-          <div ref={generatedRef} className="grid grid-cols-3 gap-6">
+          <div ref={generatedRef} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div
-              className="col-span-2 rounded-xl overflow-hidden"
+              className="lg:col-span-2 rounded-xl overflow-hidden"
               style={{ backgroundColor: '#ffffff', border: '1px solid #e5e5e5' }}
             >
               <div

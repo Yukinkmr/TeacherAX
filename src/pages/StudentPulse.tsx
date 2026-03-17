@@ -78,10 +78,10 @@ export function StudentPulse() {
           ))}
         </div>
 
-        <div className="grid grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Student List */}
           <div
-            className="col-span-3 rounded-xl overflow-hidden"
+            className="lg:col-span-3 rounded-xl overflow-hidden"
             style={{ backgroundColor: '#ffffff', border: '1px solid #e5e5e5' }}
           >
             <div className="px-5 py-4" style={{ borderBottom: '1px solid #f5f5f5' }}>
@@ -162,7 +162,7 @@ export function StudentPulse() {
           </div>
 
           {/* Right Column */}
-          <div className="col-span-2 space-y-5">
+          <div className="lg:col-span-2 space-y-5">
             {/* Next Actions */}
             <div
               className="rounded-xl overflow-hidden"
@@ -317,7 +317,7 @@ export function StudentPulse() {
 
             <div className="px-5 py-5">
               {activeTab === '概要' && (
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div>
                     <h4 className="text-xs font-medium uppercase tracking-wide mb-3" style={{ color: '#a3a3a3' }}>スコア</h4>
                     {[

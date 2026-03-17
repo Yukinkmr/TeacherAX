@@ -70,9 +70,9 @@ export function Dashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Today's Actions */}
-          <div className="col-span-3">
+          <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-black">今日のAIアクション提案</h3>
               <span
@@ -130,7 +130,7 @@ export function Dashboard() {
           </div>
 
           {/* Recent Activity */}
-          <div className="col-span-2">
+          <div className="lg:col-span-2">
             <div className="mb-4">
               <h3 className="text-sm font-semibold text-black">直近のアクティビティ</h3>
             </div>
@@ -156,7 +156,7 @@ export function Dashboard() {
           <h3 className="text-xs font-medium tracking-widest uppercase mb-4" style={{ color: '#a3a3a3' }}>
             モジュール
           </h3>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {modules.map(({ to, icon: Icon, label, desc, stat }) => (
               <button
                 key={to}

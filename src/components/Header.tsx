@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Search, BookOpen, BarChart2, GraduationCap, Users, CheckCircle2, X } from 'lucide-react';
+import { Bell, Search, BookOpen, BarChart2, GraduationCap, Users, CheckCircle2, X, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { currentTeacher } from '../data/mockData';
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
+  onMenuToggle?: () => void;
+  sidebarOpen?: boolean;
 }
 
 const searchTargets = [
@@ -69,7 +71,7 @@ const notifications = [
   },
 ];
 
-export function Header({ title, subtitle }: HeaderProps) {
+export function Header({ title, subtitle, onMenuToggle }: HeaderProps) {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
@@ -118,13 +120,21 @@ export function Header({ title, subtitle }: HeaderProps) {
       className="h-14 bg-white flex items-center justify-between px-6 sticky top-0 z-20"
       style={{ borderBottom: '1px solid #e5e5e5' }}
     >
-      {/* Left: Page title */}
+      {/* Left: Hamburger + Page title */}
       <div className="flex items-center gap-3 flex-shrink-0">
+        <button
+          onClick={onMenuToggle}
+          className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100"
+          style={{ color: '#737373' }}
+          aria-label="メニューを開閉"
+        >
+          <Menu className="w-4 h-4" />
+        </button>
         <h1 className="text-sm font-semibold text-black whitespace-nowrap">{title}</h1>
         {subtitle && (
           <>
-            <span style={{ color: '#d4d4d4' }}>/</span>
-            <p className="text-sm whitespace-nowrap" style={{ color: '#737373' }}>{subtitle}</p>
+            <span className="hidden sm:inline" style={{ color: '#d4d4d4' }}>/</span>
+            <p className="hidden sm:block text-sm whitespace-nowrap" style={{ color: '#737373' }}>{subtitle}</p>
           </>
         )}
       </div>
@@ -133,7 +143,7 @@ export function Header({ title, subtitle }: HeaderProps) {
       <div className="flex items-center gap-3 flex-shrink-0">
 
         {/* Search */}
-        <div ref={searchRef} className="relative" style={{ width: '260px' }}>
+        <div ref={searchRef} className="relative hidden sm:block" style={{ width: '220px' }}>
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none"
             style={{ color: '#a3a3a3' }}
