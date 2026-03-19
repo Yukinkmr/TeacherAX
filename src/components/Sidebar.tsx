@@ -51,7 +51,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </div>
           <div>
             <div className="text-sm font-semibold text-black tracking-tight">TEACHER AX</div>
-            <div className="text-xs" style={{ color: '#a3a3a3' }}>by KnowledgeWork</div>
           </div>
         </div>
         {/* Close button */}
