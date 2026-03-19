@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { useRef, useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
@@ -29,7 +30,43 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+// ページ遷移をまたいで前回状態を保持するキャッシュ
+let sliderCache = { top: 0, height: 0, ready: false };
+let prevActiveIndex = 0;
+
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const location = useLocation();
+  const navContainerRef = useRef<HTMLElement>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [slider, setSlider] = useState({ ...sliderCache, animate: false });
+
+  const activeIndex = navItems.findIndex(({ to, exact }) => {
+    if (exact) return location.pathname === to;
+    return location.pathname.startsWith(to);
+  });
+
+  // 表示用アクティブインデックス: 前回ページの状態から開始してアニメーション
+  const [displayActive, setDisplayActive] = useState(prevActiveIndex);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const activeItem = itemRefs.current[activeIndex];
+      const container = navContainerRef.current;
+      if (!activeItem || !container) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
+      const top = itemRect.top - containerRect.top + container.scrollTop;
+      const height = itemRect.height;
+
+      // スライダーとテキスト色を同時にアニメーション
+      sliderCache = { top, height, ready: true };
+      prevActiveIndex = activeIndex;
+      setSlider({ top, height, ready: true, animate: true });
+      setDisplayActive(activeIndex);
+    });
+  }, [activeIndex, isOpen]);
+
   return (
     <aside
       className={`fixed top-0 left-0 h-full w-60 flex flex-col z-30 bg-white transition-transform duration-300 ease-in-out ${
@@ -37,7 +74,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       }`}
       style={{ borderRight: '1px solid #e5e5e5' }}
     >
-      {/* Logo — h-14 to match header */}
+      {/* Logo */}
       <div
         className="h-14 flex items-center justify-between px-5 flex-shrink-0"
         style={{ borderBottom: '1px solid #e5e5e5' }}
@@ -49,11 +86,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           >
             <Zap className="w-3.5 h-3.5 text-white" />
           </div>
-          <div>
-            <div className="text-sm font-semibold text-black tracking-tight">TEACHER AX</div>
-          </div>
+          <div className="text-sm font-semibold text-black tracking-tight">TEACHER AX</div>
         </div>
-        {/* Close button */}
         <button
           onClick={onClose}
           className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100"
@@ -72,48 +106,69 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
-        {navItems.map(({ to, icon: Icon, label, exact }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={exact}
-            onClick={() => {
-              // モバイルではナビ後に閉じる
-              if (window.innerWidth < 1024) onClose();
-            }}
-            className="relative flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-lg text-sm font-medium overflow-hidden"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? '#f5f5f5' : 'transparent',
-              color: isActive ? '#111111' : '#a3a3a3',
-              transition: 'background-color 200ms ease, color 200ms ease',
-            })}
-          >
-            {({ isActive }) => (
-              <>
-                {/* Left indicator bar */}
-                <span
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 rounded-full"
-                  style={{
-                    height: isActive ? '18px' : '0px',
-                    backgroundColor: '#111111',
-                    transition: 'height 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+      <nav ref={navContainerRef} className="flex-1 px-2 overflow-y-auto relative">
+        {/* Sliding background */}
+        <div
+          className="absolute left-0 right-0 rounded-lg pointer-events-none"
+          style={{
+            top: slider.top,
+            height: slider.height,
+            backgroundColor: '#f5f5f5',
+            opacity: slider.ready ? 1 : 0,
+            transition: slider.animate
+              ? 'top 220ms cubic-bezier(0.4, 0, 0.2, 1)'
+              : 'none',
+            zIndex: 0,
+          }}
+        />
+
+        <div className="space-y-0.5">
+          {navItems.map(({ to, icon: Icon, label, exact }, index) => {
+            const isDisplayActive = displayActive === index;
+            return (
+              <div key={to} ref={(el) => { itemRefs.current[index] = el; }}>
+                <NavLink
+                  to={to}
+                  end={exact}
+                  onClick={() => {
+                    if (window.innerWidth < 1024) onClose();
                   }}
-                />
-                <Icon
-                  className="w-4 h-4 flex-shrink-0"
+                  className="relative flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-lg text-sm font-medium overflow-hidden"
                   style={{
-                    color: isActive ? '#111111' : '#c4c4c4',
-                    transition: 'color 200ms ease',
+                    backgroundColor: 'transparent',
+                    color: isDisplayActive ? '#111111' : '#a3a3a3',
+                    transition: 'color 220ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    position: 'relative',
+                    zIndex: 1,
                   }}
-                />
-                <span className="truncate" style={{ transition: 'color 200ms ease' }}>
-                  {label}
-                </span>
-              </>
-            )}
-          </NavLink>
-        ))}
+                >
+                  {/* Left indicator bar */}
+                  <span
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 rounded-full"
+                    style={{
+                      height: isDisplayActive ? '18px' : '0px',
+                      backgroundColor: '#111111',
+                      transition: 'height 220ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  />
+                  <Icon
+                    className="w-4 h-4 flex-shrink-0"
+                    style={{
+                      color: isDisplayActive ? '#111111' : '#c4c4c4',
+                      transition: 'color 220ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  />
+                  <span
+                    className="truncate"
+                    style={{ transition: 'color 220ms cubic-bezier(0.4, 0, 0.2, 1)' }}
+                  >
+                    {label}
+                  </span>
+                </NavLink>
+              </div>
+            );
+          })}
+        </div>
       </nav>
 
       {/* Bottom */}
